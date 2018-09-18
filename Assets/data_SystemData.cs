@@ -31,6 +31,8 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using pythonwrapper;
 
 class SystemData {
     private string wsn_version;
@@ -166,7 +168,7 @@ class SystemData {
         this._init_sparea_mcards();
     }
 
-    public void _init_xmlpaths(bool xmlonly=false) {
+    public void _init_xmlpaths(bool xmlonly = false) {
         this._areas.clear();
         this._battles.clear();
         this._packs.clear();
@@ -234,14 +236,14 @@ class SystemData {
         }
     }
 
-    public UNK get_versionhint(UNK frompos=0) {
+    public UNK get_versionhint(int frompos=0) {
         // """現在有効になっている互換性マークを返す(常に無し)。""";
         return null;
     }
 
     public void set_versionhint(UNK pos, UNK hint) {
         // """互換性モードを設定する(処理無し)。""";
-        pass;
+
     }
 
     public void update_scale() {
@@ -264,7 +266,7 @@ class SystemData {
         // 使用可能なヒープサイズの半分までをキャッシュに使用する"
         if (sys.platform == "win32") {
             class MEMORYSTATUSEX : ctypes.Structure { // TODO
-                _fields_ = [
+                var _fields_ = new List<UNK> {
                     ("dwLength", ctypes.wintypes.DWORD),
                     ("dwMemoryLoad", ctypes.wintypes.DWORD),
                     ("ullTotalPhys", ctypes.c_ulonglong),
@@ -274,10 +276,11 @@ class SystemData {
                     ("ullTotalVirtual", ctypes.c_ulonglong),
                     ("ullAvailVirtual", ctypes.c_ulonglong),
                     ("ullAvailExtendedVirtual", ctypes.c_ulonglong)
-               ];
+                };
             }
 
-            ms = MEMORYSTATUSEX();
+            int limit;
+            MEMORYSTATUSEX ms = new MEMORYSTATUSEX();
             ms.dwLength = ctypes.sizeof(ms);
             if (ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(ms))) {
                 limit = ms.ullTotalVirtual // 2;
@@ -289,7 +292,7 @@ class SystemData {
             limit = resource.getrlimit(resource.RLIMIT_DATA)[0]; // 2;
         }
 
-        if (min(limit, 2*1024*1024*1024) < this.resource_cache_size + size) {
+        if (py_functions.min(limit, 2*1024*1024*1024) < this.resource_cache_size + size) {
             this.resource_cache.clear();
             this.resource_cache_size = 0;
         }
@@ -298,15 +301,15 @@ class SystemData {
     }
 
     public void start() {
-        pass;
+
     }
 
     public void end() {
-        pass;
+
     }
 
     public void save_breakpoints() {
-        pass;
+
     }
 
     public UNK set_log() {
@@ -645,8 +648,8 @@ class SystemData {
 
     public void copy_carddata(UNK linkdata, UNK dstdir, UNK from_scenario, UNK scedir, UNK imgpaths) {
         // """参照で指定された召喚獣カードを宿へコピーする。""";
-        assert linkdata.tag == "BeastCard";
-        resid = linkdata.getint("Property/LinkId", 0);
+        Debug.Assert(linkdata.tag == "BeastCard");
+        int resid = linkdata.getint("Property/LinkId", 0);
         if (resid == 0) {
             return;
         }

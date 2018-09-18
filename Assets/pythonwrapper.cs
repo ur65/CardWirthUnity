@@ -42,4 +42,16 @@ namespace pythonwrapper
             return seq2;
         }
     }
+
+    static class py_functions
+    {
+        public static int min(int a, int b) 
+        {
+            if (a < b) {
+                return a;
+            } else {
+                return b;
+            }
+        }
+    }
 }

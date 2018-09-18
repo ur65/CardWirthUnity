@@ -73,7 +73,7 @@ namespace cw.features
             }
         }
 
-        public void demodulate(SystemData data, bool physical = true, bool mental = true)
+        public void demodulate(_CWPyElementInterface data, bool physical = true, bool mental = true)
         {
             // """modulate()と逆の調整を行う。"""
             if (physical)
@@ -103,7 +103,7 @@ namespace cw.features
         public bool father;
         public bool mother;
 
-        public Sex(SystemData data) : base(data)
+        public Sex(_CWPyElementInterface data) : base(data)
         {
             // 名前の別表現。「Male」「Female」など
             this.subname = this.data.getattr(".", "subName", this.name);
@@ -154,7 +154,7 @@ namespace cw.features
         public int levelmax;
         public List<string> basenatures;
 
-        public Nature(SystemData data) : base(data)
+        public Nature(_CWPyElementInterface data) : base(data)
         {
             // 解説
             this.description = this.data.gettext("Description", "");
@@ -173,7 +173,7 @@ namespace cw.features
     // 特徴の定義。
     class Making : Feature
     {
-        public Making(SystemData data) : base(data)
+        public Making(_CWPyElementInterface data) : base(data)
         {
         }
     }
@@ -181,14 +181,14 @@ namespace cw.features
     // デバグ宿で簡易生成を行う際の能力型。
     class SampleType : Feature
     {
-        public SampleType(SystemData data) : base(data)
+        public SampleType(_CWPyElementInterface data) : base(data)
         {
         }
     }
 
     public static F
     {
-        public static void wrap_ability(SystemData data)
+        public static void wrap_ability(_CWPyElementInterface data)
         {
             data.dex = cw.util.F.numwrap(data.dex, 1, data.maxdex);
             data.agl = cw.util.F.numwrap(data.agl, 1, data.maxagl);
