@@ -18,7 +18,7 @@ namespace pythonwrapper
         }
 
 
-        public static void shuffle<T>(this List<T> seq)
+        public static void shuffle<T>(List<T> seq)
         {
             for (int i = 0; i < seq.Count; i++)
             {
